@@ -1,6 +1,6 @@
 {
   "name": "@behaver/fixed-star-coordinate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This pkg is builded for calculating the coordinate of fixed star.",
   "main": "index.js",
   "directories": {
