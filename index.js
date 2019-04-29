@@ -5,14 +5,14 @@ const { DynamicCalculator, TrigonometricCalculator } = require('@behaver/fixed-s
 const { JDateRepository } = require('@behaver/jdate');
 
 /**
- * FixedStarCoordinate
+ * FixedStarPosition
  *
- * FixedStarCoordinate 是一个用于计算恒星坐标的组件
+ * FixedStarPosition 是一个用于计算恒星坐标的组件
  *
  * @author 董 三碗 <qianxing@yeah.net>
  * @version 1.0.0
  */
-class FixedStarCoordinate {
+class FixedStarPosition {
 
   /**
    * 构造函数
@@ -131,4 +131,4 @@ class FixedStarCoordinate {
   }
 }
 
-module.exports = FixedStarCoordinate;
+module.exports = FixedStarPosition;

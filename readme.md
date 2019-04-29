@@ -1,31 +1,31 @@
-# FixedStarCoordinate
-[![GitHub license](https://img.shields.io/badge/license-ISC-brightgreen.svg)](#) [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/@behaver/fixed-star-coordinate) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
+# FixedStarPosition
+[![GitHub license](https://img.shields.io/badge/license-ISC-brightgreen.svg)](#) [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/@behaver/fixed-star-position) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
 
 ## 简介
 
-FixedStarCoordinate 是一个用于计算恒星赤道坐标的天文组件，计算的结果最终将以 `EquinoctialCoordinate` 实例返回。
+FixedStarPosition 是一个用于计算恒星赤道坐标的天文组件，计算的结果最终将以 `EquinoctialCoordinate` 实例返回。
 
 ## 安装
 
 通过 npm 安装，在你的 node 项目目录下执行：
 
-`npm install @behaver/fixed-star-coordinate`
+`npm install @behaver/fixed-star-position`
 
 安装完成后，调用即可：
 
-`const FixedStarCoordinate = require('@behaver/fixed-star-coordinate');`
+`const FixedStarPosition = require('@behaver/fixed-star-position');`
 
 ## 用例
 
 ```js
 const { JDateRepository } = require('@behaver/jdate');
-const FixedStarCoordinate = require('@behaver/fixed-star-coordinate');
+const FixedStarPosition = require('@behaver/fixed-star-position');
 
 // 实例化儒略时间对象
 let jdate = new JDateRepository(2462088.69, 'jde');
 
 // 实例化恒星赤道坐标计算组件
-let FSC = new FixedStarCoordinate(jdate);
+let FSC = new FixedStarPosition(jdate);
 
 // 获取赤道坐标组件
 let eqc = FSC.get({

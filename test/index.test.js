@@ -4,31 +4,31 @@ const expect = require("chai").expect;
 const { JDateRepository } = require('@behaver/jdate');
 const { EquinoctialCoordinate } = require('@behaver/celestial-coordinate');
 const { DynamicCalculator, TrigonometricCalculator } = require('@behaver/fixed-star-calculator');
-const FixedStarCoordinate = require('../index');
+const FixedStarPosition = require('../index');
 
 describe('#index', () => {
   describe('#constructor(epoch, model)', () => {
     it('The param epoch should be an instance of JDateRepository.', () => {
       expect(() => {
-        new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
       }).not.to.throw();
 
       expect(() => {
-        new FixedStarCoordinate('123');
+        new FixedStarPosition('123');
       }).to.throw();
     });
 
     it('The param model should be a valid string.', () => {
       expect(() => {
-        new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'), 'tri');
+        new FixedStarPosition(new JDateRepository(2462088.69, 'jde'), 'tri');
       }).not.to.throw();
 
       expect(() => {
-        new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'), 123);
+        new FixedStarPosition(new JDateRepository(2462088.69, 'jde'), 123);
       }).to.throw();
 
       expect(() => {
-        new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'), '123');
+        new FixedStarPosition(new JDateRepository(2462088.69, 'jde'), '123');
       }).to.throw();
     });
   });
@@ -36,18 +36,18 @@ describe('#index', () => {
   describe('#set epoch(value)', () => {
     it('The param value should be an instance of JDateRepository.', () => {
       expect(() => {
-        let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
         FSC.epoch = new JDateRepository(2362088.69, 'jde');
       }).not.to.throw();
 
       expect(() => {
-        let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
         FSC.epoch = '123';
       }).to.throw();
     });
 
     it('After setting, the related props should be auto changed too.', () => {
-      let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+      let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
       FSC.epoch = new JDateRepository(2362088.69, 'jde');
 
       expect(FSC.private.epoch.JDE).to.equal(2362088.69);
@@ -57,7 +57,7 @@ describe('#index', () => {
 
   describe('#get epoch()', () => {
     it('The return of this method should be an instance of JDateRepository.', () => {
-      let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+      let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
 
       expect(FSC.epoch).to.be.an.instanceof(JDateRepository);
     });
@@ -66,18 +66,18 @@ describe('#index', () => {
   describe('#set model(value)', () => {
     it('The param value should be a valid String.', () => {
       expect(() => {
-        let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
         FSC.model = 'tri';
       }).not.to.throw();
 
       expect(() => {
-        let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
         FSC.model = 'abc';
       }).to.throw();
     });
 
     it('After setting, the related props should be auto changed too.', () => {
-      let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+      let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
       FSC.model = 'tri';
       
       expect(FSC.private.model).to.equal('tri');
@@ -87,7 +87,7 @@ describe('#index', () => {
 
   describe('#get model()', () => {
     it('The return of method should be a String.', () => {
-      let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+      let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
 
       expect(FSC.model).to.equal('dyn');
     });
@@ -96,7 +96,7 @@ describe('#index', () => {
   describe('#get(options)', () => {
     it('The param options should be all number and existed.', () => {
       expect(() => {
-        let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
         FSC.get({
           RA: 41.0500,
           Dec: 49.2283,
@@ -108,7 +108,7 @@ describe('#index', () => {
       }).not.to.throw();
 
       expect(() => { // 缺值
-        let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
         FSC.get({
           RA: 41.0500,
           Dec: 49.2283,
@@ -119,7 +119,7 @@ describe('#index', () => {
       }).to.throw();
 
       expect(() => { // 错值
-        let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+        let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
         FSC.get({
           RA: '41.0500',
           Dec: 49.2283,
@@ -132,7 +132,7 @@ describe('#index', () => {
     });
 
     it('The return of method should be an EquinoctialCoordinate.', () => {
-      let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+      let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
       let eqc = FSC.get({
         RA: 41.0500,
         Dec: 49.2283,
@@ -146,7 +146,7 @@ describe('#index', () => {
     });
 
     it('Verify', () => {
-      let FSC = new FixedStarCoordinate(new JDateRepository(2462088.69, 'jde'));
+      let FSC = new FixedStarPosition(new JDateRepository(2462088.69, 'jde'));
       let eqc = FSC.get({
         RA: 41.0500,
         Dec: 49.2283,
