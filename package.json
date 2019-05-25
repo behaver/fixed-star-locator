@@ -24,13 +24,13 @@
   },
   "homepage": "https://github.com/behaver/fixed-star-position#readme",
   "dependencies": {
-    "@behaver/celestial-coordinate": "^1.6.2",
-    "@behaver/fixed-star-calculator": "^1.0.4",
+    "@behaver/celestial-coordinate": "^1.8.3",
+    "@behaver/fixed-star-calculator": "^1.0.7",
     "@behaver/jdate": "^2.3.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.0.2"
+    "mocha": "^6.1.4"
   },
   "files": []
 }

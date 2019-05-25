@@ -61,6 +61,8 @@ class FixedStarPosition {
     // 实例化赤道坐标对象
     let EQC = new EquinoctialCoordinate({
       sc,
+      withAnnualAberration: false,
+      withNutation: false,
     });
 
     // 修正岁差, 光行差, 章动
