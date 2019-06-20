@@ -1,99 +1,156 @@
 'use strict';
 
-const { EquinoctialCoordinate } = require('@behaver/celestial-coordinate');
+const { EquinoctialCoordinate, CelestialLocator } = require('@behaver/celestial-coordinate');
 const { DynamicCalculator, TrigonometricCalculator } = require('@behaver/fixed-star-calculator');
 const { JDateRepository } = require('@behaver/jdate');
 
 /**
- * FixedStarPosition
+ * FixedStarLocator
  *
- * FixedStarPosition 是一个用于计算恒星坐标的组件
+ * FixedStarLocator 是一个用于计算恒星坐标的组件
  *
  * @author 董 三碗 <qianxing@yeah.net>
- * @version 1.0.0
  */
-class FixedStarPosition {
+class FixedStarLocator extends CelestialLocator {
 
   /**
    * 构造函数
    * 
-   * @param {JDateRepository} epoch 目标历元
-   * @param {String}          model 计算模型：'dyn': 动力学, 'tri': 三角学
+   * @param {Object} options 定位参数项
    */
-  constructor(epoch, model = 'dyn') {
-    
-    // 初始化私有空间
-    this.private = {}
+  constructor(options) {
+    super();
 
-    this.private.epoch = epoch;
-    this.model = model;
+    // 设置缺省参数
+    this.private = {
+      ...this.private,
+      id: 'fixed',
+      time: new JDateRepository,
+      ra: 0,
+      dec: 0,
+      parallax: 0,
+      pmra: 0,
+      pmdec: 0,
+      radvel: 0,
+    }
+
+    this.model = 'dyn';
+
+    // 设定参数项
+    this.options(options);
+  }
+
+  /**
+   * 设置定位参数项
+   *
+   * @param  {String}           options.id       位置id
+   * @param  {Number}           options.ra       J2000 平赤经，单位：°
+   * @param  {Number}           options.dec      J2000 平赤纬，单位：°
+   * @param  {Number}           options.parallax 周年视差，单位：角秒
+   * @param  {Number}           options.pmra     赤经自行，单位：角秒每儒略年
+   * @param  {Number}           options.pmdec    赤纬自行，单位：角秒每儒略年
+   * @param  {Number}           options.radvel   日心视向速度，单位：km/s
+   * @param  {JDateRepository}  options.time     儒略时间对象
+   * @param  {String}           options.model    计算模型字串
+   * 
+   * @return {FixedStarLocator}                  返回 this 引用
+   * 
+   */
+  options({
+    id,
+    ra,
+    dec,
+    parallax,
+    pmra,
+    pmdec,
+    radvel,
+    time,
+    model,
+  } = {}) {
+    if (id !== undefined) this.id = id;
+    if (ra !== undefined) this.ra = ra;
+    if (dec !== undefined) this.dec = dec;
+    if (parallax !== undefined) this.parallax = parallax;
+    if (pmra !== undefined) this.pmra = pmra;
+    if (pmdec !== undefined) this.pmdec = pmdec;
+    if (radvel !== undefined) this.radvel = radvel;
+    if (time !== undefined) this.time = time;
+    if (model !== undefined) this.model = model;
+
+    return this;
   }
 
   /**
    * 获取恒星赤道坐标对象
    * 
-   * @param  {Number}                options.RA       J2000 平赤经，单位：°
-   * @param  {Number}                options.Dec      J2000 平赤纬，单位：°
-   * @param  {Number}                options.parallax 周年视差，单位：角秒
-   * @param  {Number}                options.PMRA     赤经自行，单位：角秒每儒略年
-   * @param  {Number}                options.PMDec    赤纬自行，单位：角秒每儒略年
-   * @param  {Number}                options.radVel   日心视向速度，单位：km/s
-   * @return {EquinoctialCoordinate}                  恒星赤道坐标对象
+   * @param  {Object} options 定位参数项
+   * 
+   * @return {Object}         定位结果集
    */
-  get({
-    RA,
-    Dec,
-    parallax,
-    PMRA,
-    PMDec,
-    radVel,
-  }) {
+  get(options = {}) {
+
+    this.options(options);
+
+    // 初始化变量
+    let id = this.id,
+        ra = this.ra,
+        dec = this.dec,
+        parallax = this.parallax,
+        pmra = this.pmra,
+        pmdec = this.pmdec,
+        radvel = this.radvel,
+        time = this.time,
+        model = this.model;
+
     // 计算获取恒星赤道球坐标，结果修正了自行与周年视差
     let sc = this.Calculator.calc({
-      RA,
-      Dec,
+      ra,
+      dec,
       parallax,
-      PMRA,
-      PMDec,
-      radVel,
+      pmra,
+      pmdec,
+      radvel,
     });
 
     // 实例化赤道坐标对象
-    let EQC = new EquinoctialCoordinate({
+    let coord = new EquinoctialCoordinate({
       sc,
       withAnnualAberration: false,
       withNutation: false,
     });
 
     // 修正岁差, 光行差, 章动
-    EQC.on({
-      epoch: this.epoch,
+    coord.on({
+      epoch: time,
       withAnnualAberration: true,
       withNutation: true,
-    })
+    });
 
-    return EQC;
+    return {
+      id,
+      coord,
+      time,
+    };
   }
 
   /**
-   * 设置目标历元对象
+   * 设置 儒略时间对象
    * 
-   * @param {JDateRepository} value 目标历元对象
+   * @param {JDateRepository} value 儒略时间对象
    */
-  set epoch(value) {
-    if (!(value instanceof JDateRepository)) throw Error('The param value should be a instance of JDateRepository');
-    
+  set time(value) {
+    super.time = value;
+
     this.Calculator.epoch = value;
-    this.private.epoch = value;
   }
 
   /**
-   * 获取目标历元对象
+   * 获取 儒略时间对象
    * 
-   * @return {JDateRepository} 目标历元对象
+   * @return {JDateRepository} 儒略时间对象
    */
-  get epoch() {
-    return new JDateRepository(this.private.epoch.JD);
+  get time() {
+    return this.private.time;
   }
 
   /**
@@ -110,12 +167,12 @@ class FixedStarPosition {
 
     if (value === 'dyn') {
       if (this.private.model !== 'dyn') {
-        this.Calculator = new DynamicCalculator(this.private.epoch);
+        this.Calculator = new DynamicCalculator(this.private.time);
         this.private.model = 'dyn';
       }
     } else if (value === 'tri') {
       if (this.private.model !== 'tri') {
-        this.Calculator = new TrigonometricCalculator(this.private.epoch);
+        this.Calculator = new TrigonometricCalculator(this.private.time);
         this.private.model = 'tri';
       }
     } else {
@@ -131,6 +188,126 @@ class FixedStarPosition {
   get model() {
     return this.private.model;
   }
+
+  /**
+   * 设定 恒星 J2000 平赤经（单位：°）
+   * 
+   * @param {Number} value 恒星 J2000 平赤经（单位：°）
+   */
+  set ra(value) {
+    if (typeof(value) !== 'number') throw Error('The param value should be a Number.');
+  
+    this.private.ra = value;
+  }
+
+  /**
+   * 获取 恒星 J2000 平赤经（单位：°）
+   * 
+   * @return {Number} 恒星 J2000 平赤经（单位：°）
+   */
+  get ra() {
+    return this.private.ra;
+  }
+
+  /**
+   * 设定 恒星 J2000 平赤纬（单位：°）
+   * 
+   * @param {Number} value 恒星 J2000 平赤纬（单位：°）
+   */
+  set dec(value) {
+    if (typeof(value) !== 'number') throw Error('The param value should be a Number.');
+  
+    this.private.dec = value;
+  }
+
+  /**
+   * 获取 恒星 J2000 平赤纬（单位：°）
+   * 
+   * @return {Number} 恒星 J2000 平赤纬（单位：°）
+   */
+  get dec() {
+    return this.private.dec;
+  }
+
+  /**
+   * 设定 周年视差（单位：角秒）
+   * 
+   * @param {Number} value 周年视差（单位：角秒）
+   */
+  set parallax(value) {
+    if (typeof(value) !== 'number') throw Error('The param value should be a Number.');
+  
+    this.private.parallax = value;
+  }
+
+  /**
+   * 获取 周年视差（单位：角秒）
+   * 
+   * @return {Number} 周年视差（单位：角秒）
+   */
+  get parallax() {
+    return this.private.parallax;
+  }
+
+  /**
+   * 设定 赤经自行（单位：角秒每儒略年）
+   * 
+   * @param {Number} value 赤经自行（单位：角秒每儒略年）
+   */
+  set pmra(value) {
+    if (typeof(value) !== 'number') throw Error('The param value should be a Number.');
+  
+    this.private.pmra = value;
+  }
+
+  /**
+   * 获取 赤经自行（单位：角秒每儒略年）
+   * 
+   * @return {Number} 赤经自行（单位：角秒每儒略年）
+   */
+  get pmra() {
+    return this.private.pmra;
+  }
+
+  /**
+   * 设定 赤纬自行（单位：角秒每儒略年）
+   * 
+   * @param {Number} value 赤纬自行（单位：角秒每儒略年）
+   */
+  set pmdec(value) {
+    if (typeof(value) !== 'number') throw Error('The param value should be a Number.');
+  
+    this.private.pmdec = value;
+  }
+
+  /**
+   * 获取 赤纬自行（单位：角秒每儒略年）
+   * 
+   * @return {Number} 赤纬自行（单位：角秒每儒略年）
+   */
+  get pmdec() {
+    return this.private.pmdec;
+  }
+
+  /**
+   * 设定 日心视向速度（单位：km/s）
+   * 
+   * @param {Number} value 日心视向速度（单位：km/s）
+   */
+  set radvel(value) {
+    if (typeof(value) !== 'number') throw Error('The param value should be a Number.');
+  
+    this.private.radvel = value;
+  }
+
+  /**
+   * 获取 日心视向速度（单位：km/s）
+   * 
+   * @return {Number} 日心视向速度（单位：km/s）
+   */
+  get radvel() {
+    return this.private.radvel;
+  }
 }
 
-module.exports = FixedStarPosition;
+module.exports = FixedStarLocator;

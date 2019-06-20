@@ -1,5 +1,5 @@
 {
-  "name": "@behaver/fixed-star-position",
+  "name": "@behaver/fixed-star-locator",
   "version": "1.0.2",
   "description": "This pkg is builded for calculating the position of fixed star.",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/behaver/fixed-star-position.git"
+    "url": "git+https://github.com/behaver/fixed-star-locator.git"
   },
   "keywords": [
     "fixed",
@@ -20,12 +20,12 @@
   "author": "Sanwan, Dong",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/behaver/fixed-star-position/issues"
+    "url": "https://github.com/behaver/fixed-star-locator/issues"
   },
-  "homepage": "https://github.com/behaver/fixed-star-position#readme",
+  "homepage": "https://github.com/behaver/fixed-star-locator#readme",
   "dependencies": {
-    "@behaver/celestial-coordinate": "^1.8.3",
-    "@behaver/fixed-star-calculator": "^1.0.7",
+    "@behaver/celestial-coordinate": "^1.9.1",
+    "@behaver/fixed-star-calculator": "^1.1.0",
     "@behaver/jdate": "^2.3.2"
   },
   "devDependencies": {
