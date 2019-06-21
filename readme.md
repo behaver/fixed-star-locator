@@ -29,19 +29,19 @@ let FSC = new FixedStarLocator(jdate);
 
 // 获取赤道坐标组件
 let eqc = FSC.get({
-  RA: 41.0500,
-  Dec: 49.2283,
-  PMRA: 0.336,
-  PMDec: -0.089,
-  radVel: 25,
+  ra: 41.0500,
+  dec: 49.2283,
+  pmra: 0.336,
+  pmdec: -0.089,
+  radvel: 25,
   parallax: 0.089,
 });
 
 // 输出赤经，单位：°
-console.log(eqc.ra.getDegrees());
+console.log(eqc.longitude.getDegrees());
 
 // 输出赤纬，单位：°
-console.log(eqc.dec.getDegrees());
+console.log(eqc.latitude.getDegrees());
 
 // 输出赤地心距，单位：AU
 console.log(eqc.radius);
