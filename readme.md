@@ -25,10 +25,11 @@ const FixedStarLocator = require('@behaver/fixed-star-locator');
 let jdate = new JDateRepository(2462088.69, 'jde');
 
 // 实例化恒星赤道坐标计算组件
-let FSC = new FixedStarLocator(jdate);
+let FSC = new FixedStarLocator;
 
 // 获取赤道坐标组件
-let eqc = FSC.get({
+let res = FSC.get({
+  time: jdate,
   ra: 41.0500,
   dec: 49.2283,
   pmra: 0.336,
@@ -36,6 +37,8 @@ let eqc = FSC.get({
   radvel: 25,
   parallax: 0.089,
 });
+
+let eqc = res.coord;
 
 // 输出赤经，单位：°
 console.log(eqc.longitude.getDegrees());
