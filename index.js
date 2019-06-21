@@ -18,7 +18,7 @@ class FixedStarLocator extends CelestialLocator {
    * 
    * @param {Object} options 定位参数项
    */
-  constructor(options) {
+  constructor(options = {}) {
     super();
 
     // 设置缺省参数
@@ -154,10 +154,9 @@ class FixedStarLocator extends CelestialLocator {
   }
 
   /**
-   * 设置计算模型
+   * 设置 计算模型
    * 
-   * @param {String} value 计算模型缩写字串
-   *                       dyn: 动力学模型, tri: 三角学模型
+   * @param {String} value 计算模型缩写字串（dyn: 动力学模型, tri: 三角学模型）
    */
   set model(value) {
     // 参数检验
@@ -181,7 +180,7 @@ class FixedStarLocator extends CelestialLocator {
   }
 
   /**
-   * 获取计算模型缩写字串
+   * 获取计算模型
    * 
    * @return {String} 计算模型缩写字串
    */

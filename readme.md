@@ -1,31 +1,31 @@
-# FixedStarPosition
-[![GitHub license](https://img.shields.io/badge/license-ISC-brightgreen.svg)](#) [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/@behaver/fixed-star-position) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
+# FixedStarLocator
+[![GitHub license](https://img.shields.io/badge/license-ISC-brightgreen.svg)](#) [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/@behaver/fixed-star-locator) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
 
 ## 简介
 
-FixedStarPosition 是一个用于计算恒星赤道坐标的天文组件，计算的结果最终将以 `EquinoctialCoordinate` 实例返回。
+FixedStarLocator 是一个用于计算恒星赤道坐标的天文组件，计算的结果最终将以 `EquinoctialCoordinate` 实例返回。
 
 ## 安装
 
 通过 npm 安装，在你的 node 项目目录下执行：
 
-`npm install @behaver/fixed-star-position`
+`npm install @behaver/fixed-star-locator`
 
 安装完成后，调用即可：
 
-`const FixedStarPosition = require('@behaver/fixed-star-position');`
+`const FixedStarLocator = require('@behaver/fixed-star-locator');`
 
 ## 用例
 
 ```js
 const { JDateRepository } = require('@behaver/jdate');
-const FixedStarPosition = require('@behaver/fixed-star-position');
+const FixedStarLocator = require('@behaver/fixed-star-locator');
 
 // 实例化儒略时间对象
 let jdate = new JDateRepository(2462088.69, 'jde');
 
 // 实例化恒星赤道坐标计算组件
-let FSC = new FixedStarPosition(jdate);
+let FSC = new FixedStarLocator(jdate);
 
 // 获取赤道坐标组件
 let eqc = FSC.get({
@@ -49,39 +49,99 @@ console.log(eqc.radius);
 
 ## API
 
-`constructor(epoch, model)`
+`constructor(options)`
 
 构造函数
 
-* epoch 目标历元
-* model 计算模型：'dyn': 动力学; 'tri': 三角学;
+`options(options)`
+
+设置定位参数项：
+
+* options.id       位置id
+* options.ra       J2000 平赤经，单位：°
+* options.dec      J2000 平赤纬，单位：°
+* options.parallax 周年视差，单位：角秒
+* options.pmra     赤经自行，单位：角秒每儒略年
+* options.pmdec    赤纬自行，单位：角秒每儒略年
+* options.radvel   日心视向速度，单位：km/s
+* options.time     儒略时间对象
+* options.model    计算模型字串
 
 `get(options)`
 
 获取恒星赤道坐标对象
 
-* options.RA       J2000 平赤经，单位：°
-* options.Dec      J2000 平赤纬，单位：°
-* options.parallax 周年视差，单位：角秒
-* options.PMRA     赤经自行，单位：角秒每儒略年
-* options.PMDec    赤纬自行，单位：角秒每儒略年
-* options.radVel   日心视向速度，单位：km/s
+`set id(value)`
 
-`set epoch(value)`
+设定 位置id
 
-设置目标历元对象
+`get id()`
 
-`get epoch()`
+获取 位置id
 
-获取目标历元对象
+`set time(value)`
+
+设置 儒略时间对象
+
+`get time()`
+
+获取 儒略时间对象
 
 `set model(value)`
 
-设置计算模型
+设置 计算模型
 
 `get model()`
 
-获取计算模型缩写字串
+获取 计算模型
+
+`set ra(value)`
+
+设定 恒星 J2000 平赤经（单位：°）
+
+`get ra()`
+
+获取 恒星 J2000 平赤经（单位：°）
+
+`set dec(value)`
+
+设定 恒星 J2000 平赤纬（单位：°）
+
+`get dec()`
+
+获取 恒星 J2000 平赤纬（单位：°）
+
+`set parallax(value)`
+
+设定 周年视差（单位：角秒）
+
+`get parallax()`
+
+获取 周年视差（单位：角秒）
+
+`set pmra(value)`
+
+设定 赤经自行（单位：角秒每儒略年）
+
+`get pmra()`
+
+获取 赤经自行（单位：角秒每儒略年）
+
+`set pmdec(value)`
+
+设定 赤纬自行（单位：角秒每儒略年）
+
+`get pmdec()`
+
+获取 赤纬自行（单位：角秒每儒略年）
+
+`set radvel(value)`
+
+设定 日心视向速度（单位：km/s）
+
+`get radvel()`
+
+获取 日心视向速度（单位：km/s）
 
 ## 许可证书
 
